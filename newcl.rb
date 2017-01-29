@@ -26,12 +26,13 @@ def fetch_repos
   result = fetch("https://api.github.com/search/repositories?q=language:common-lisp+created%3A%3E2017-01-01")
   json = JSON.parse result.body
   json["items"].map { |r| [r["created_at"], r["description"], r["html_url"]] }
+    .sort_by { |i| i[0] }.reverse
 end
 
 def print_repos(repos)
   repos.each do |r|
     r[1] ||= "No description provided"
-    puts r[1].red
+    puts "#{r[0][0..9].white} - #{r[1].red}"
     puts r[2].yellow
   end
 end
